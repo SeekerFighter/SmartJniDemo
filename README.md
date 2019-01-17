@@ -1,0 +1,2 @@
+# SmartJniDemo
+一个用于简化NDK开发时，jni代码生成java对象并赋值的小工具类
