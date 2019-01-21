@@ -9,9 +9,12 @@ using namespace smart_jni;
 ## step2 开始使用
 ```
 Class* test = Class::forName(env,"java对象绝对路径");
-    jobject testObj = test->newInstance();
-    test->setIntFiledValue(testObj,"java字段参数",100);
-    test->setBooleanFiledValue(testObj, "result", static_cast<jboolean>(true));
-    test->setByteFiledValue(testObj,"aByte",0x0A);
-    delete test;//删除
+jobject testObj = test->newInstance();
+test->setIntFiledValue(testObj,"java字段参数",100);
+test->setBooleanFiledValue(testObj, "result", static_cast<jboolean>(true));
+test->setByteFiledValue(testObj,"aByte",0x0A);
+delete test;//删除
 ```
+
+
+## step3 其它api函数详见源码
