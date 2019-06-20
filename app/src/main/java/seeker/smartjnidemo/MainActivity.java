@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public native String stringFromJNI();
 
-    public native TestSmartJni getTestSmartJni();
+    public native SmartJni getTestSmartJni();
 
     // Used to load the 'native-lib' library on application startup.
     static {

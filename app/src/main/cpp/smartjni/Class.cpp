@@ -5,6 +5,8 @@
 #include "Method.h"
 #include "Field.h"
 #include "JNIHelper.h"
+#include "JavaType.h"
+#include "LogUtil.h"
 
 namespace smart_jni {
 
@@ -13,7 +15,11 @@ namespace smart_jni {
         return clazz;
     }
 
-    jobject Class::newInstance() {
+    jobject Class::newInstance(bool userEmptyParamsConstruct) {
+        if (userEmptyParamsConstruct){
+            jmethodID construct = JNIHelper::findMethod(smart_jnienv, false, mClass,"<init>", "()V");
+            return smart_jnienv->NewObject(mClass,construct,"");
+        }
         return smart_jnienv->AllocObject(mClass);
     }
 
@@ -140,6 +146,30 @@ namespace smart_jni {
 
     jmethodID Class::s_Class_getName_ID = NULL;
     const Class *Class::END = NULL;
+
+
+    jobject Class::invokeMethod(jobject receiver, const char *methodname, ...) {
+        va_list vl;
+        va_start(vl, methodname);
+
+        int size = 0;
+        while (va_arg(vl, Class*) != END) {
+            size++;
+        }
+
+        va_start(vl, methodname);
+        Class *clazz = NULL;
+        Class **params_clazz = (Class **) malloc(size * sizeof(Class *));
+        size = 0;
+        while ((clazz = va_arg(vl, Class*)) != END) {
+            params_clazz[size++] = clazz;
+        }
+        va_end(vl);
+        Method *method = new Method(smart_jnienv, mClass, methodname, size, params_clazz);
+        jobject result = method->_invoke(receiver);
+        delete method;
+        return result;
+    }
 
 }
 

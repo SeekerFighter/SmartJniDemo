@@ -50,7 +50,7 @@ namespace smart_jni {
          * 实例化对象
          */
 
-        jobject newInstance();
+        jobject newInstance(bool userEmptyParamsConstruct);
 
         /**
          * 析构
@@ -68,25 +68,27 @@ namespace smart_jni {
         static const Class *END;
 
 
-        void setIntFiledValue(jobject obj, const char *filedname, jint value);
+        void setIntFiledValue(jobject receiver, const char *filedname, jint value);
 
-        void setShortFiledValue(jobject obj, const char *filedname, jshort value);
+        void setShortFiledValue(jobject receiver, const char *filedname, jshort value);
 
-        void setCharFiledValue(jobject obj, const char *filedname, jchar value);
+        void setCharFiledValue(jobject receiver, const char *filedname, jchar value);
 
-        void setLongFiledValue(jobject obj, const char *filedname, jlong value);
+        void setLongFiledValue(jobject receiver, const char *filedname, jlong value);
 
-        void setObjectFiledValue(jobject obj, const char *filedname, jobject value);
+        void setObjectFiledValue(jobject receiver, const char *filedname, jobject value);
 
-        void setBooleanFiledValue(jobject obj, const char *filedname, jboolean value);
+        void setBooleanFiledValue(jobject receiver, const char *filedname, jboolean value);
 
-        void setByteFiledValue(jobject obj, const char *filedname, jbyte value);
+        void setByteFiledValue(jobject receiver, const char *filedname, jbyte value);
 
-        void setFloatFiledValue(jobject obj, const char *filedname, jfloat value);
+        void setFloatFiledValue(jobject receiver, const char *filedname, jfloat value);
 
-        void setDoubleFiledValue(jobject obj, const char *filedname, jdouble value);
+        void setDoubleFiledValue(jobject receiver, const char *filedname, jdouble value);
 
-        jint getIntFiledValue(jobject obj, const char *filedname);
+        jint getIntFiledValue(jobject receiver, const char *filedname);
+
+        jobject invokeMethod(jobject receiver, const char *methodname,...);
 
     };
 

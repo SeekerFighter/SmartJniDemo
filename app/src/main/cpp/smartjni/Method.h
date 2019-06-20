@@ -19,6 +19,7 @@ namespace smart_jni {
         jclass mClass;
         Class **mParamsClass;
         int mParamsCount;
+        JNIEnv *smart_jnienv;
 
     public:
         Method(JNIEnv *smart_jnienv, const jclass claxx, const char *method_name, const int n,
@@ -27,12 +28,14 @@ namespace smart_jni {
         /**
          * 调用函数
          */
-        jobject invoke(JNIEnv *smart_jnienv, jobject receiver, ...);
+        jobject invoke(jobject receiver, ...);
+
+        jobject _invoke(jobject receiver);
 
         /**
          * 获取函数名
          */
-        const char *getName(JNIEnv *smart_jnienv);
+        const char *getName();
 
         /**
          * 释构
