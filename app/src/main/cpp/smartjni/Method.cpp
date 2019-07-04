@@ -51,10 +51,8 @@ namespace smart_jni {
 
     jobject Method::invoke(jobject receiver, ...) {
         jobject result = NULL;
-
         jclass element_claxx = smart_jnienv->FindClass("java/lang/Object");
         jobjectArray params = smart_jnienv->NewObjectArray(mParamsCount, element_claxx, NULL);
-
         va_list va;
         va_start(va, receiver);
 
@@ -74,19 +72,14 @@ namespace smart_jni {
                 value = Double::valueOf(smart_jnienv, va_arg(va, jdouble));
             }else if (cur == Jshort::type(smart_jnienv)) {
                 value = Short::valueOf(smart_jnienv, va_arg(va, jshort));
-            }
-//            else if (cur == Integer::type(smart_jnienv)
-//                     || cur == Long::type(smart_jnienv)
-//                     || cur == Byte::type(smart_jnienv)) {
-//                value = va_arg(va, jobject);
-//            }
-            else {
+            }else {
                 value = va_arg(va,jobject);
                 Object* ob = dynamic_cast<Object *>(cur);
                 ob->release();
             }
 
             smart_jnienv->SetObjectArrayElement(params, i, value);
+            smart_jnienv->DeleteLocalRef(value);
         }
 
         va_end(va);
@@ -96,9 +89,9 @@ namespace smart_jni {
                                                        "java/lang/reflect/Method", "invoke",
                                                        "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
         }
-
         result = smart_jnienv->CallObjectMethod(mMethod, s_Method_invoke_ID, receiver, params);
-
+        smart_jnienv->DeleteLocalRef(params);
+        smart_jnienv->DeleteLocalRef(element_claxx);
         return result;
     }
 
@@ -138,6 +131,7 @@ namespace smart_jni {
             }
 
             smart_jnienv->SetObjectArrayElement(params, i, value);
+            smart_jnienv->DeleteLocalRef(value);
         }
 
         if (NULL == s_Method_invoke_ID) {
@@ -147,7 +141,8 @@ namespace smart_jni {
         }
 
         result = smart_jnienv->CallObjectMethod(mMethod, s_Method_invoke_ID, receiver, params);
-
+        smart_jnienv->DeleteLocalRef(params);
+        smart_jnienv->DeleteLocalRef(element_claxx);
         return result;
     }
 
